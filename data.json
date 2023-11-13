@@ -2412,27 +2412,6 @@
       ],
       "quantity": 1,
       "user": 5
-    },
-    {
-      "title": "Hyaluronic Acid Serum",
-      "description": "L'OrÃ©al Paris introduces Hyaluron Expert Replumping Serum formulated with 1.5% Hyaluronic Acid",
-      "price": 19,
-      "discountPercentage": 13.31,
-      "rating": 4.83,
-      "stock": 110,
-      "brand": "L'Oreal Paris",
-      "category": "skincare",
-      "thumbnail": "https://i.dummyjson.com/data/products/16/thumbnail.jpg",
-      "images": [
-        "https://i.dummyjson.com/data/products/16/1.png",
-        "https://i.dummyjson.com/data/products/16/2.webp",
-        "https://i.dummyjson.com/data/products/16/3.jpg",
-        "https://i.dummyjson.com/data/products/16/4.jpg",
-        "https://i.dummyjson.com/data/products/16/thumbnail.jpg"
-      ],
-      "quantity": 1,
-      "user": 4,
-      "id": 4
     }
   ],
   "orders": [
@@ -2715,6 +2694,89 @@
       },
       "status": "pending",
       "id": 4
+    },
+    {
+      "items": [
+        {
+          "title": "Hyaluronic Acid Serum",
+          "description": "L'OrÃ©al Paris introduces Hyaluron Expert Replumping Serum formulated with 1.5% Hyaluronic Acid",
+          "price": 19,
+          "discountPercentage": 13.31,
+          "rating": 4.83,
+          "stock": 110,
+          "brand": "L'Oreal Paris",
+          "category": "skincare",
+          "thumbnail": "https://i.dummyjson.com/data/products/16/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/16/1.png",
+            "https://i.dummyjson.com/data/products/16/2.webp",
+            "https://i.dummyjson.com/data/products/16/3.jpg",
+            "https://i.dummyjson.com/data/products/16/4.jpg",
+            "https://i.dummyjson.com/data/products/16/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 4,
+          "id": 4
+        }
+      ],
+      "totalAmount": 19,
+      "totalItems": 1,
+      "user": {
+        "email": "nikhil@gmail.com",
+        "password": "Nikhil@123",
+        "addresses": [
+          {
+            "name": "nikhil kumar",
+            "email": "nikhil@gmail.com",
+            "city": "Rourkela",
+            "state": "odisha",
+            "pinCode": "770017",
+            "phone": "7418529630",
+            "street": "Rourkela, steel plant",
+            "number": "7418529630"
+          },
+          {
+            "name": "nikhil kumar",
+            "email": "nikhil@gmail.com",
+            "number": "7785445962",
+            "street": "Nist boys hostel",
+            "city": "berhampur",
+            "state": "odisha",
+            "pinCode": "761005"
+          },
+          {
+            "name": "Abhasana Mohanty",
+            "email": "abha@gmail.com",
+            "city": "Berhampur",
+            "state": "odisha",
+            "pinCode": "761008",
+            "number": "7894563210",
+            "street": "Nist Girls Hostel"
+          },
+          {
+            "name": "nikhil kumar",
+            "email": "nikhil@gmail.com",
+            "number": "7735144145",
+            "street": "dfvd",
+            "city": "dfa",
+            "state": "odisha",
+            "pinCode": "789654"
+          }
+        ],
+        "id": 4
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "nikhil kumar",
+        "email": "nikhil@gmail.com",
+        "number": "7735144145",
+        "street": "dfvd",
+        "city": "dfa",
+        "state": "odisha",
+        "pinCode": "789654"
+      },
+      "status": "pending",
+      "id": 5
     }
   ]
 }

@@ -1,8 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { selectItems,updateCartAsync,deleteItemFromCartAsync } from "./cartSlice";
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import {  useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 
 // const products = [
@@ -35,7 +33,6 @@ import { Link, Navigate } from "react-router-dom";
 
 export default function Cart() {
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(true);
 const items = useSelector(selectItems);
 const totalAmount = items.reduce((amount ,item) => item.price * item.quantity + amount ,0)
 const totalItems = items.reduce((total ,item) => item.quantity + total ,0)
@@ -57,7 +54,7 @@ const handleRemove =(e, id)=>{
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
         <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">Cart</h1>
           <div className="flow-root">
-            <ul role="list" className="-my-6 divide-y divide-gray-200">
+            <ul  className="-my-6 divide-y divide-gray-200">
 
               {items.map((product) => (
                 <li key={product.id} className="flex py-6">
@@ -141,7 +138,7 @@ const handleRemove =(e, id)=>{
               <button
                 type="button"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
-                onClick={() => setOpen(false)}
+                
               >
                 Continue Shopping
                 <span aria-hidden="true"> &rarr;</span>

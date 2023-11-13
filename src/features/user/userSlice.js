@@ -9,8 +9,8 @@ const initialState = {
 
 export const fetchLoggedInUserOrderAsync = createAsyncThunk(
   'user/fetchLoggedInUserOrders',
-  async (userId) => {
-    const response = await fetchLoggedInUserOrders(userId);
+  async (id) => {
+    const response = await fetchLoggedInUserOrders(id);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -18,8 +18,8 @@ export const fetchLoggedInUserOrderAsync = createAsyncThunk(
 
 export const updateUserAsync = createAsyncThunk(
   'user/updateUser',
-  async (userId) => {
-    const response = await updateUser(userId);
+  async (id) => {
+    const response = await updateUser(id);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -27,8 +27,8 @@ export const updateUserAsync = createAsyncThunk(
 
 export const fetchLoggedInUserAsync = createAsyncThunk(
   'user/fetchLoggedInUser',
-  async (userId) => {
-    const response = await fetchLoggedInUser(userId);
+  async (id) => {
+    const response = await fetchLoggedInUser(id);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }

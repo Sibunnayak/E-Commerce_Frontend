@@ -277,7 +277,7 @@ function Checkout() {
                 <p className="mt-1 text-sm leading-6 text-gray-600">
                   Choose from Existing addresses
                 </p>
-                <ul role="list">
+                <ul >
                   {user.addresses.map((address,index) => (
                     <li
                       key={index}
@@ -374,7 +374,7 @@ function Checkout() {
         <div className="border-t border-gray-200 px-0 py-6 sm:px-0">
         <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">Cart</h1>
           <div className="flow-root">
-            <ul role="list" className="-my-6 divide-y divide-gray-200">
+            <ul  className="-my-6 divide-y divide-gray-200">
 
               {items.map((product) => (
                 <li key={product.id} className="flex py-6">
