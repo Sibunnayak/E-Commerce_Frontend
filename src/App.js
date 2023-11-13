@@ -20,6 +20,9 @@ import { useEffect } from 'react';
 import PageNotFound from './pages/404';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import UserOrdersPage from './pages/UserOrderPage';
+import UserProfilePage from './pages/UserProfilePage';
+import { fetchLoggedInUserAsync } from './features/user/userSlice';
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -59,6 +62,10 @@ const router = createBrowserRouter([
     path: '/orders',
     element: <UserOrdersPage></UserOrdersPage>,
   },
+  { 
+    path: '/profile',
+    element: <UserProfilePage></UserProfilePage>,
+  },
 ]);
 
 function App() {
@@ -68,6 +75,7 @@ const user = useSelector(selectLoggedInUser)
 useEffect(()=>{
   if(user){
  dispatch(fetchItemsByUserIdAsync(user.id));
+ dispatch(fetchLoggedInUserAsync(user.id));
   }
 },[dispatch,user])
 
