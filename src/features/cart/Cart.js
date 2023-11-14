@@ -1,43 +1,19 @@
 import { useSelector, useDispatch } from "react-redux";
-import { selectItems,updateCartAsync,deleteItemFromCartAsync } from "./cartSlice";
+import { selectItems,updateCartAsync,deleteItemFromCartAsync, selectCartStatus } from "./cartSlice";
 import {  useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
+import { MutatingDots } from "react-loader-spinner";
+import Modal from '../common/Modal';
 
-// const products = [
-//   {
-//     id: 1,
-//     name: "Throwback Hip Bag",
-//     href: "#",
-//     color: "Salmon",
-//     price: "$90.00",
-//     quantity: 1,
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-//     imageAlt:
-//       "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-//   },
-//   {
-//     id: 2,
-//     name: "Medium Stuff Satchel",
-//     href: "#",
-//     color: "Blue",
-//     price: "$32.00",
-//     quantity: 1,
-//     imageSrc:
-//       "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-//     imageAlt:
-//       "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-//   },
-//   // More products...
-// ];
 
 export default function Cart() {
   const dispatch = useDispatch();
 const items = useSelector(selectItems);
 const totalAmount = items.reduce((amount ,item) => discountedPrice(item) * item.quantity + amount ,0)
 const totalItems = items.reduce((total ,item) => item.quantity + total ,0)
-
+const status = useSelector(selectCartStatus);
+const [openModal, setOpenModal] = useState(null);
 const handleQuantity = (e, item) => {
   dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
 };
@@ -55,6 +31,17 @@ const handleRemove =(e, id)=>{
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
         <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">Cart</h1>
           <div className="flow-root">
+          {status === 'loading' ? (<MutatingDots 
+  height="100"
+  width="100"
+  color="rgb(79, 70, 229)"
+  secondaryColor= '#4fa94d'
+  radius='12.5'
+  ariaLabel="mutating-dots-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+ />):null}
             <ul  className="-my-6 divide-y divide-gray-200">
 
               {items.map((product) => (
@@ -96,8 +83,17 @@ const handleRemove =(e, id)=>{
                       </div>
 
                       <div className="flex">
+                      <Modal
+                            title={`Remove ${product.title}`}
+                            message="Are you sure you want to Remove this Cart item ?"
+                            dangerOption="Remove"
+                            cancelOption="Cancel"
+                            dangerAction={(e) => handleRemove(e, product.id)}
+                            cancelAction={()=>setOpenModal(null)}
+                            showModal={openModal === product.id}
+                          ></Modal>
                         <button
-                        onClick={e=>handleRemove(e,product.id)}
+                        onClick={e=>{setOpenModal(product.id)}}
                           type="button"
                           className="font-medium text-indigo-600 hover:text-indigo-500"
                         >

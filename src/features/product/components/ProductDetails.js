@@ -6,14 +6,19 @@ import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductByIdAsync, selectProductById } from '../ProductSlice'
 import { useParams } from 'react-router-dom';
-import { addToCartAsync } from '../../cart/cartSlice';
+import { addToCartAsync, selectItems } from '../../cart/cartSlice';
 import {selectLoggedInUser} from '../../auth/authSlice'
 import { discountedPrice } from '../../../app/constants';
+import { useAlert } from 'react-alert';
+import {MutatingDots} from 'react-loader-spinner';
+import { selectProductListStatus } from '../ProductSlice';
+
 const colors = [
   { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
   { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
   { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
 ];
+
 const sizes = [
   { name: 'XXS', inStock: false },
   { name: 'XS', inStock: true },
@@ -47,6 +52,9 @@ export default function ProductDetail() {
   const product = useSelector(selectProductById);
   const dispatch = useDispatch()
   const params=useParams();
+  const items = useSelector(selectItems);
+  const alert = useAlert();
+  const status = useSelector(selectProductListStatus);
 
   useEffect(()=>{
     dispatch(fetchProductByIdAsync(params.id))
@@ -54,13 +62,39 @@ export default function ProductDetail() {
 
   const handleCart = (e)=>{
     e.preventDefault();
-    const newItem ={...product,quantity:1,user:user.id};
-    delete newItem['id']
-    dispatch(addToCartAsync(newItem))
+    // const newItem ={...product,quantity:1,user:user.id};
+    // delete newItem['id']
+    // dispatch(addToCartAsync(newItem))
+    if (items.findIndex((item) => item.productId === product.id) < 0) {
+      console.log({ items, product });
+      const newItem = {
+        ...product,
+        productId: product.id,
+        quantity: 1,
+        user: user.id,
+      };
+      delete newItem['id'];
+      dispatch(addToCartAsync(newItem));
+      // TODO: it will be based on server response of backend
+      alert.success('Item added to Cart');
+    } else {
+      alert.error('Item Already added');
+    }
   }
 
   return (
     <div className="bg-white">
+       {status === 'loading' ? (<MutatingDots 
+  height="100"
+  width="100"
+  color="rgb(79, 70, 229)"
+  secondaryColor= '#4fa94d'
+  radius='12.5'
+  ariaLabel="mutating-dots-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+ />):null}
       {product && (
       <div className="pt-6">
         <nav aria-label="Breadcrumb">
