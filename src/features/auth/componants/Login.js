@@ -15,7 +15,7 @@ export function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
- console.log(errors);
+ 
   return (
     <>
     {user && <Navigate to='/' replace={true}></Navigate>}

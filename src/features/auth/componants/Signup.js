@@ -16,7 +16,7 @@ export function Signup() {
 const user = useSelector(selectLoggedInUser)
 
 
-  console.log(errors);
+  // console.log(errors);
 
   return (
     <>
