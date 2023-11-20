@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { selectItems,updateCartAsync,deleteItemFromCartAsync, selectCartStatus } from "./cartSlice";
+import { selectItems,updateCartAsync,deleteItemFromCartAsync,selectCartLoaded, selectCartStatus } from "./cartSlice";
 import {  useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { discountedPrice } from "../../app/constants";
@@ -13,6 +13,7 @@ const items = useSelector(selectItems);
 
 const totalAmount = items.reduce((amount ,item) => discountedPrice(item.product) * item.quantity + amount ,0)
 const totalItems = items.reduce((total ,item) => item.quantity + total ,0)
+const cartLoaded = useSelector(selectCartLoaded)
 
 const status = useSelector(selectCartStatus);
 const [openModal, setOpenModal] = useState(null);
@@ -26,8 +27,7 @@ const handleRemove =(e, id)=>{
 
   return (
     <>
-    {!items.length  && <Navigate to='/' replace={true}></Navigate>}
-    <div>
+{!items.length && cartLoaded && <Navigate to="/" replace={true}></Navigate>}    <div>
       <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
         
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">

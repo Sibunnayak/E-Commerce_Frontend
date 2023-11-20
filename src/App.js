@@ -10,7 +10,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Protected from "./features/auth/componants/Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
-import { selectLoggedInUser } from "./features/auth/authSlice";
+import { selectLoggedInUser,checkAuthAsync, selectUserChecked} from "./features/auth/authSlice";
 import { useEffect } from "react";
 import PageNotFound from "./pages/404";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
@@ -142,6 +142,12 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
+  const userChecked = useSelector(selectUserChecked);
+
+
+  useEffect(()=>{
+    dispatch(checkAuthAsync())
+  },[dispatch])
 
   useEffect(() => {
     if (user) {
@@ -156,9 +162,9 @@ function App() {
       {/* <Home></Home> */}
       {/* <LoginPage></LoginPage> */}
       {/* <RouterProvider router={router} /> */}
-      <Provider template={AlertTemplate} {...options}>
+      { userChecked &&<Provider template={AlertTemplate} {...options}>
           <RouterProvider router={router} />
-        </Provider>
+        </Provider>}
     </div>
   );
 }
