@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { createUser,checkUser,signOut } from './authApi';
 
 const initialState = {
-  loggedInUser: null,// this should only contain user identity => 'id'/'role'
+  loggedInUserToken: null,// this should only contain user identity => 'id'/'role'
   status: 'idle',
   error:null
 };
@@ -54,7 +54,7 @@ export const authSlice = createSlice({
       })
       .addCase(createUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.loggedInUser = action.payload;
+        state.loggedInUserToken = action.payload;
       })
 
       .addCase(checkUserAsync.pending, (state) => {
@@ -62,7 +62,7 @@ export const authSlice = createSlice({
       })
       .addCase(checkUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.loggedInUser = action.payload;
+        state.loggedInUserToken = action.payload;
       })
       .addCase(checkUserAsync.rejected, (state, action) => {
         state.status = 'idle';
@@ -74,7 +74,7 @@ export const authSlice = createSlice({
       })
       .addCase(signOutAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.loggedInUser = null;
+        state.loggedInUserToken = null;
       });
   },
 });
@@ -85,7 +85,7 @@ export const { increment } = authSlice.actions;
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectCount = (state) => state.counter.value;
-export const selectLoggedInUser =(state) => state.auth.loggedInUser;
+export const selectLoggedInUser =(state) => state.auth.loggedInUserToken;
 export const selectError =(state) => state.auth.error;
 
 export default authSlice.reducer;

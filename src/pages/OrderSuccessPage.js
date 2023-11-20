@@ -11,9 +11,9 @@ function OrderSuccessPage(){
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser)
   useEffect(()=>{
-    dispatch(resetCartAsync(user.id))
+    dispatch(resetCartAsync())
     dispatch(resetOrder())
-  },[dispatch,user])
+  },[dispatch])
     return(
       <>
       {!params.id && <Navigate to='/' replace={true}></Navigate>}

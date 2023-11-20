@@ -4,22 +4,24 @@ import {
   fetchLoggedInUserOrderAsync,
   selectUserInfo,
   selectUserOrders,
+  selectUserInfoStatus,
 } from "../userSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
-
+import { MutatingDots } from 'react-loader-spinner';
 
 export default function UserOrders() {
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
+  const status = useSelector(selectUserInfoStatus);
   useEffect(() => {
-    dispatch(fetchLoggedInUserOrderAsync(userInfo.id));
-  }, [dispatch, userInfo]);
+    dispatch(fetchLoggedInUserOrderAsync());
+  }, [dispatch]);
 
   return (
     <div>
-      {orders.map((order) => (
+      {orders && orders.map((order) => (
         <div key={order.id}>
           <div>
             <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -113,6 +115,17 @@ export default function UserOrders() {
           </div>
         </div>
       ))}
+      {status === 'loading' ? (<MutatingDots 
+  height="100"
+  width="100"
+  color="rgb(79, 70, 229)"
+  secondaryColor= '#4fa94d'
+  radius='12.5'
+  ariaLabel="mutating-dots-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+ />):null}
     </div>
   );
 }
