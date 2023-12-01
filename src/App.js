@@ -26,6 +26,7 @@ import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrderPage";
 import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
+import StripeCheckout from './pages/StripeCheckout';
 
 const options = {
   timeout: 5000,
@@ -129,6 +130,14 @@ const router = createBrowserRouter([
     element: <Protected><UserProfilePage></UserProfilePage></Protected>,
   },
   {
+    path: '/stripe-checkout/',
+    element: (
+      <Protected>
+        <StripeCheckout></StripeCheckout>
+      </Protected>
+    ),
+  },
+  {
     path: "/logout",
     element: <Logout></Logout>,
   },
@@ -162,9 +171,11 @@ function App() {
       {/* <Home></Home> */}
       {/* <LoginPage></LoginPage> */}
       {/* <RouterProvider router={router} /> */}
-      { userChecked &&<Provider template={AlertTemplate} {...options}>
-          <RouterProvider router={router} />
-        </Provider>}
+      {userChecked && (
+          <Provider template={AlertTemplate} {...options}>
+            <RouterProvider router={router} />
+          </Provider>
+        )}
     </div>
   );
 }
