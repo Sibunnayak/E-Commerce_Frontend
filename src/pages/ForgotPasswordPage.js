@@ -1,4 +1,4 @@
-import ForgotPassword from "../features/auth/componants/ForgotPassword";
+import ForgotPassword from "../features/auth/components/ForgotPassword";
 
 function ForgotPasswordPage() {
     return ( <div>

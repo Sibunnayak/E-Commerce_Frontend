@@ -7,7 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import * as React from "react";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Protected from "./features/auth/componants/Protected";
+import Protected from "./features/auth/components/Protected";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItemsByUserIdAsync } from "./features/cart/cartSlice";
 import { selectLoggedInUser,checkAuthAsync, selectUserChecked} from "./features/auth/authSlice";
@@ -17,9 +17,9 @@ import OrderSuccessPage from "./pages/OrderSuccessPage";
 import UserOrdersPage from "./pages/UserOrderPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import { fetchLoggedInUserAsync } from "./features/user/userSlice";
-import Logout from "./features/auth/componants/Logout";
+import Logout from "./features/auth/components/Logout";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ProtectedAdmin from "./features/auth/componants/ProtectedAdmin";
+import ProtectedAdmin from "./features/auth/components/ProtectedAdmin";
 import AdminHome from "./pages/AdminHome";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
@@ -27,7 +27,7 @@ import AdminOrdersPage from "./pages/AdminOrderPage";
 import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import StripeCheckout from './pages/StripeCheckout';
-
+import ResetPasswordPage from './pages/ResetPasswordPage';
 const options = {
   timeout: 5000,
   position: positions.BOTTOM_LEFT,
@@ -144,6 +144,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage></ForgotPasswordPage>,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage></ResetPasswordPage>,
   },
   
 ]);
