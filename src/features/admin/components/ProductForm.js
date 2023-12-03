@@ -22,6 +22,23 @@ function ProductForm() {
   const [openModal, setOpenModal] = useState(null);
   const alert = useAlert();
 
+  const colors = [
+    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400',id:'white' },
+    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400', id:'gray' },
+    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900',id:'black' },
+  ];
+
+  const sizes = [
+    { name: 'XXS', inStock: true, id:'xxs' },
+    { name: 'XS', inStock: true, id:'xs' },
+    { name: 'S', inStock: true, id:'s' },
+    { name: 'M', inStock: true, id:'m' },
+    { name: 'L', inStock: true , id:'l'},
+    { name: 'XL', inStock: true, id:'xl' },
+    { name: '2XL', inStock: true , id:'2xl'},
+    { name: '3XL', inStock: true , id:'3xl'},
+  ];
+
   useEffect(() => {
     if (params.id) {
       dispatch(fetchProductByIdAsync(params.id));
@@ -43,6 +60,12 @@ function ProductForm() {
       setValue('image3', selectedProduct.images[2]);
       setValue('brand', selectedProduct.brand);
       setValue('category', selectedProduct.category);
+      setValue('highlight1', selectedProduct.highlights[0]);
+      setValue('highlight2', selectedProduct.highlights[1]);
+      setValue('highlight3', selectedProduct.highlights[2]);
+      setValue('highlight4', selectedProduct.highlights[3]);
+      setValue('sizes', selectedProduct.sizes.map(size=>size.id));
+      setValue('colors', selectedProduct.colors.map(color=>color.id));
     }
   }, [selectedProduct, params.id, setValue]);
 
@@ -55,30 +78,37 @@ function ProductForm() {
   return (
     <>
     <form
-      noValidate
-      onSubmit={handleSubmit((data) => {
-        console.log(data);
-        const product = { ...data };
-        product.images = [
-          product.image1,
-          product.image2,
-          product.image3,
-          product.thumbnail,
-        ];
-        product.rating = 0;
-        delete product['image1'];
-        delete product['image2'];
-        delete product['image3'];
-        product.price = +product.price;
-        product.stock = +product.stock;
-        product.discountPercentage = +product.discountPercentage;
-        console.log(product);
-
-        if (params.id) {
-          product.id = params.id;
-          product.rating = selectedProduct.rating || 0;
-          dispatch(updateProductAsync(product));
-          alert.success('Product Updated');
+        noValidate
+        onSubmit={handleSubmit((data) => {
+          console.log(data);
+          const product = { ...data };
+          product.images = [
+            product.image1,
+            product.image2, 
+            product.image3,
+            product.thumbnail,
+          ];
+          product.highlights = [
+            product.highlight1,
+            product.highlight2, 
+            product.highlight3,
+            product.highlight4,
+          ];
+          product.rating = 0;
+          product.colors = product.colors.map(color=>colors.find(clr=>clr.id===color));
+          product.sizes = product.sizes.map(size=>sizes.find(sz=>sz.id===size));
+          delete product['image1'];
+          delete product['image2'];
+          delete product['image3'];
+          product.price = +product.price;
+          product.stock = +product.stock;
+          product.discountPercentage = +product.discountPercentage;
+          console.log(product);
+          if (params.id) {
+            product.id = params.id;
+            product.rating = selectedProduct.rating || 0;
+            dispatch(updateProductAsync(product));
+            alert.success('Product Updated');
           reset();
         } else {
           dispatch(createProductAsync(product));
@@ -95,7 +125,11 @@ function ProductForm() {
           </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          {selectedProduct && selectedProduct.deleted && <h2 className="text-red-500 sm:col-span-6">This product is deleted</h2>}
+              {selectedProduct && selectedProduct.deleted && (
+                <h2 className="text-red-500 sm:col-span-6">
+                  This product is deleted
+                </h2>
+              )}
             <div className="sm:col-span-6">
               <label
                 htmlFor="title"
@@ -160,7 +194,49 @@ function ProductForm() {
                 </select>
               </div>
             </div>
-
+            <div className="col-span-full">
+                <label
+                  htmlFor="colors"
+                  className="block text-sm font-medium leading-6 text-gray-900">
+                    Colors
+                </label>
+                <div className="mt-2">
+                  {colors.map((color) => (
+                    <>
+                      <input
+                        type="checkbox"
+                        {...register('colors', {
+                        })}
+                        key={color.id}
+                        value={color.id}
+                      />{' '}
+                      {color.name}
+                    </>
+                  ))}
+                </div>
+              </div>
+              <div className="col-span-full">
+                <label
+                  htmlFor="sizes"
+                  className="block text-sm font-medium leading-6 text-gray-900">
+                    Sizes
+                </label>
+                <div className="mt-2">
+                  {sizes.map((size) => (
+                    <>
+                      <input
+                        type="checkbox"
+                        {...register('sizes', {
+                        })}
+                        key={size.id}
+                        value={size.id}
+                      />{' '}
+                      {size.name}
+                    </>
+                  ))}
+                </div>
+              </div>
+                  
             <div className="col-span-full">
               <label
                 htmlFor="category"
@@ -183,27 +259,27 @@ function ProductForm() {
             </div>
 
             <div className="sm:col-span-2">
-              <label
-                htmlFor="price"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Price
-              </label>
-              <div className="mt-2">
-                <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
-                  <input
-                    type="number"
-                    {...register('price', {
-                      required: 'price is required',
-                      min: 1,
-                      max: 10000,
-                    })}
-                    id="price"
-                    className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                  />
+                <label
+                  htmlFor="price"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Price
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="number"
+                      {...register('price', {
+                        required: 'price is required',
+                        min: 1,
+                        max: 10000,
+                      })}
+                      id="price"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
 
             <div className="sm:col-span-2">
               <label
@@ -333,6 +409,82 @@ function ProductForm() {
                 </div>
               </div>
             </div>
+            <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight1"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 1
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register('highlight1', {
+                      })}
+                      id="highlight1"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight2"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 2
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register('highlight2', {
+                      })}
+                      id="highlight2"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight3"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 3
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register('highlight3', {
+                      })}
+                      id="highlight3"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="sm:col-span-6">
+                <label
+                  htmlFor="highlight4"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Highlight 4
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 ">
+                    <input
+                      type="text"
+                      {...register('highlight4', {
+                      })}
+                      id="highlight4"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
 
@@ -385,7 +537,7 @@ function ProductForm() {
                       Candidates
                     </label>
                     <p className="text-gray-500">
-                      Get notified when a candidate applies for a job.
+                      Get notified when a Coustmer upload for a Product.
                     </p>
                   </div>
                 </div>
@@ -406,7 +558,7 @@ function ProductForm() {
                       Offers
                     </label>
                     <p className="text-gray-500">
-                      Get notified when a candidate accepts or rejects an offer.
+                      Get notified when a Coustmer accepts or rejects an offer.
                     </p>
                   </div>
                 </div>
