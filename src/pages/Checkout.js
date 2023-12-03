@@ -4,36 +4,16 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { updateUserAsync } from "../features/user/userSlice";
-import { createOrderAsync, selectCurrentOrder } from "../features/order/orderSlice";
+import { createOrderAsync, selectCurrentOrder,selectStatus } from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
-import { discountedPrice } from "../app/constants";
+import { MutatingDots } from 'react-loader-spinner';
 
-// const addresses = [
-//   {
-//     name: 'John wick',
-//     street: '11th Main',
-//     city: 'Delhi',
-//     pinCode: 110001,
-//     state: 'Delhi',
-//     phone: 12312321331,
-//     email:"johnwick@gmail.com"
-//   },
-//   {
-//     name: 'John Doe',
-//     street: '15th Main',
-//     city: 'Bangalore',
-//     pinCode: 560034,
-//     state: 'Karnataka',
-//     phone: 123123123,
-//     email:'johndoe@gmail.com'
-//   },
-// ];
 function Checkout() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const items = useSelector(selectItems);
-
-  const totalAmount = items.reduce((amount ,item) => discountedPrice(item.product) * item.quantity + amount ,0)
+  const status = useSelector(selectStatus);
+  const totalAmount = items.reduce((amount ,item) => item.product.discountPrice * item.quantity + amount ,0)
   const totalItems = items.reduce((total ,item) => item.quantity + total ,0)
 
   const [selectedAddress,setselectedAddress] = useState(null);
@@ -74,13 +54,24 @@ function Checkout() {
   return (
     <>
     {!items.length  && <Navigate to='/' replace={true}></Navigate>}
-    {CurrentOrder  && CurrentOrder.paymentMethod ==='cash' && <Navigate to={`/order-success/${CurrentOrder.id}`} replace={true}></Navigate>}
+    {CurrentOrder  && CurrentOrder.paymentMethod ==='cash' && (<Navigate to={`/order-success/${CurrentOrder.id}`} replace={true}></Navigate>)}
     {CurrentOrder &&  CurrentOrder.paymentMethod ==='card' && (
         <Navigate
           to={`/stripe-checkout/`}
           replace={true}
         ></Navigate>
       )}
+      {status === 'loading' ? (<MutatingDots 
+  height="100"
+  width="100"
+  color="rgb(79, 70, 229)"
+  secondaryColor= '#4fa94d'
+  radius='12.5'
+  ariaLabel="mutating-dots-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+ />):
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
         <div className="lg:col-span-3">
@@ -323,7 +314,7 @@ function Checkout() {
                     </li>
                   ))}
                 </ul>
-
+              
                 <div className="mt-10 space-y-10">
                   <fieldset>
                     <legend className="text-sm font-semibold leading-6 text-gray-900">
@@ -401,7 +392,7 @@ function Checkout() {
                         <h3>
                           <a href={item.product.id}>{item.product.title}</a>
                         </h3>
-                        <p className="ml-4">${discountedPrice(item.product)}</p>
+                        <p className="ml-4">${item.product.discountPrice}</p>
                       </div>
                       <p className="mt-1 text-sm text-gray-500">
                         {item.product.brand}
@@ -479,7 +470,7 @@ function Checkout() {
       </div>
         </div>
       </div>
-    </div>
+    </div>}
     </>
   );
 }

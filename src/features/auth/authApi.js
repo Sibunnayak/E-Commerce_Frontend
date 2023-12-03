@@ -27,7 +27,6 @@ export function checkAuth() {
       reject( error );
     }
 
-    // TODO: on server it will only return some info of user (not password)
   });
 }
 

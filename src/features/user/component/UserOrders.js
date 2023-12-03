@@ -7,7 +7,6 @@ import {
   selectUserInfoStatus,
 } from "../userSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
-import { discountedPrice } from "../../../app/constants";
 import { MutatingDots } from 'react-loader-spinner';
 
 export default function UserOrders() {
@@ -50,7 +49,7 @@ export default function UserOrders() {
                               <h3>
                                 <a href={item.product.id}>{item.product.title}</a>
                               </h3>
-                              <p className="ml-4">${discountedPrice(item.product)}</p>
+                              <p className="ml-4">${item.product.discountPrice}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
                               {item.product.brand}
